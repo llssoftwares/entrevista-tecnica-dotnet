@@ -1,3 +1,5 @@
+using BackendDesafio.API.Endpoints;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -9,6 +11,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => "Hello World!");
+app.MapMenuEndpoints();
 
 app.Run();
