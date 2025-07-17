@@ -7,7 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddValidation();
-builder.Services.AddSingleton<IMenuItemRepository, MenuItemInMemoryRepository>();
+//builder.Services.AddSingleton<IMenuItemRepository, MenuItemInMemoryRepository>();
+builder.Services.AddSingleton<IMenuItemRepository, MenuItemMongoRepository>();
 
 var app = builder.Build();
 
