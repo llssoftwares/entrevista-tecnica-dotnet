@@ -1,0 +1,7 @@
+services:
+  backenddesafio.api:
+    container_name: backenddesafio.api
+    image: ${DOCKER_REGISTRY-}backenddesafioapi
+    build:
+      context: .
+      dockerfile: src/BackendDesafio.API/Dockerfile
