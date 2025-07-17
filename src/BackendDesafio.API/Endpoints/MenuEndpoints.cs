@@ -1,6 +1,6 @@
-﻿using BackendDesafio.API.Dtos;
+﻿using BackendDesafio.API.Domain.Repositories;
+using BackendDesafio.API.Dtos;
 using BackendDesafio.API.Validation;
-using FluentValidation;
 
 namespace BackendDesafio.API.Endpoints;
 
@@ -12,20 +12,22 @@ public static class MenuEndpoints
             .WithTags("Menu")
             .WithOpenApi();
 
-        group.MapPost("/", async (CreateMenuItemRequest request, IValidator<CreateMenuItemRequest> validator) =>
+        group.MapPost("/", async (CreateMenuItemRequest request, IMenuItemRepository repository) =>
         {
-            var menuItemId = "1";
+            var menuItemId = await repository.AddMenuItemAsync(request.Name, request.RelatedId);
             return Results.Created($"/api/v1/menu/{menuItemId}", menuItemId);
         }).WithValidation<CreateMenuItemRequest>();
 
-        group.MapDelete("/{id:int}", async (int id) =>
+        group.MapDelete("/{id:int}", async (int id, IMenuItemRepository repository) =>
         {
+            await repository.DeleteMenuItemAsync(id);
             return Results.Ok();
         });
 
-        group.MapGet("/", async () =>
+        group.MapGet("/", async (IMenuItemRepository repository) =>
         {
-            return Results.Ok();
+            var menuItems = await repository.GetMenuItemsAsync();
+            return Results.Ok(menuItems);
         });
 
         return app;
