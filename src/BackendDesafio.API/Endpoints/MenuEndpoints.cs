@@ -1,5 +1,6 @@
 ﻿using BackendDesafio.API.Domain.Repositories;
 using BackendDesafio.API.Dtos;
+using BackendDesafio.API.Mappers;
 using BackendDesafio.API.Validation;
 
 namespace BackendDesafio.API.Endpoints;
@@ -27,7 +28,8 @@ public static class MenuEndpoints
         group.MapGet("/", async (IMenuItemRepository repository) =>
         {
             var menuItems = await repository.GetMenuItemsAsync();
-            return Results.Ok(menuItems);
+            var menu = MenuMapper.GetMenu([.. menuItems]);
+            return Results.Ok(menu);
         });
 
         return app;
