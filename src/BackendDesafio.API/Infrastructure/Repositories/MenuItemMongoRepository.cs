@@ -1,6 +1,6 @@
-﻿using BackendDesafio.API.Domain;
-using BackendDesafio.API.Domain.Entities;
+﻿using BackendDesafio.API.Domain.Entities;
 using BackendDesafio.API.Domain.Repositories;
+using BackendDesafio.API.Exceptions;
 using MongoDB.Driver;
 
 namespace BackendDesafio.API.Infrastructure.Repositories;

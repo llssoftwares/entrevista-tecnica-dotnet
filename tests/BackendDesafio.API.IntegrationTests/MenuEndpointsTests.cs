@@ -1,4 +1,6 @@
 ﻿using BackendDesafio.API.Dtos;
+using BackendDesafio.API.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
@@ -8,13 +10,7 @@ namespace BackendDesafio.API.IntegrationTests;
 public class MenuEndpointsTests(CustomWebApplicationFactory factory) : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly HttpClient _client = factory.CreateClient();
-    private const string _basePath = "/api/v1/menu";
-
-    private class ErrorMessage
-    {
-        public int Status { get; set; }
-        public string Title { get; set; } = string.Empty;
-    }
+    private const string _basePath = "/api/v1/menu";    
 
     [Fact]
     public async Task CreateItems_GetMenu_TreeShouldBeConstructedCorrectly()
@@ -79,10 +75,10 @@ public class MenuEndpointsTests(CustomWebApplicationFactory factory) : IClassFix
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-        var errorResponse = (await response.Content.ReadFromJsonAsync<ErrorMessage>())!;
+        var errorResponse = (await response.Content.ReadFromJsonAsync<ProblemDetails>())!;
 
-        errorResponse.Status.ShouldBe(400);
-        errorResponse.Title.ShouldContain("Related menu item with ID 999 does not exist.");
+        errorResponse.Type.ShouldBe(nameof(RelatedMenuItemNotFoundException));        
+        errorResponse.Detail!.ShouldContain("Related menu item with ID 999 does not exist.");
     }
 
     [Fact]
@@ -94,10 +90,10 @@ public class MenuEndpointsTests(CustomWebApplicationFactory factory) : IClassFix
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-        var errorResponse = (await response.Content.ReadFromJsonAsync<ErrorMessage>())!;
+        var errorResponse = (await response.Content.ReadFromJsonAsync<ProblemDetails>())!;
 
-        errorResponse.Status.ShouldBe(400);
-        errorResponse.Title.ShouldContain("Menu item with ID 999 does not exist.");
+        errorResponse.Type.ShouldBe(nameof(MenuItemNotFoundException));        
+        errorResponse.Detail!.ShouldContain("Menu item with ID 999 does not exist.");
     }
 
     private static List<CreateMenuItemRequest> GetMenuItemsToCreate() =>
