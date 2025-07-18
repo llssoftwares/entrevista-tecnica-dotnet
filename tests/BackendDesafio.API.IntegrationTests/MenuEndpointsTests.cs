@@ -9,7 +9,7 @@ public class MenuEndpointsTests(CustomWebApplicationFactory factory) : IClassFix
 {
     private readonly HttpClient _client = factory.CreateClient();
     private const string _basePath = "/api/v1/menu";
-    
+
     private class ErrorMessage
     {
         public int Status { get; set; }
@@ -47,21 +47,24 @@ public class MenuEndpointsTests(CustomWebApplicationFactory factory) : IClassFix
     public async Task CreateItem_DeleteItem_ShouldDeleteItem()
     {
         // Arrange
-        await _client.PostAsJsonAsync(_basePath, new CreateMenuItemRequest("Item"));
+        var postResponse = await _client.PostAsJsonAsync(_basePath, new CreateMenuItemRequest("Item"));
+        var itemId = (await postResponse.Content.ReadFromJsonAsync<CreateMenuItemResponse>())!.Id;
 
         var initialGetResponse = await _client.GetAsync(_basePath);
         var initialItems = (await initialGetResponse.Content.ReadFromJsonAsync<List<MenuItemDto>>())!;
-        initialItems.ShouldNotBeEmpty(); // Assert
+
+        initialItems.ShouldContain(x => x.Id == itemId); //Assert
 
         // Act
-        var deleteResponse = await _client.DeleteAsync($"{_basePath}/1");
+        var deleteResponse = await _client.DeleteAsync($"{_basePath}/{itemId}");
 
         // Assert
         deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         var finalGetResponse = await _client.GetAsync(_basePath);
         var finalItems = (await finalGetResponse.Content.ReadFromJsonAsync<List<MenuItemDto>>())!;
-        finalItems.ShouldBeEmpty();
+
+        finalItems.ShouldNotContain(x => x.Id == itemId);
     }
 
     [Fact]
