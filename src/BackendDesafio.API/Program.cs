@@ -23,3 +23,5 @@ app.UseMiddlewares();
 app.MapMenuEndpoints();
 
 app.Run();
+
+public partial class Program { }

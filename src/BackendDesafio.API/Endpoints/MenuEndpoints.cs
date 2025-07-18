@@ -24,7 +24,7 @@ public static class MenuEndpoints
             };
                 
             var menuItemId = await repository.AddMenuItemAsync(menuItem);
-            return Results.Created($"/api/v1/menu/{menuItemId}", menuItemId);
+            return Results.Created($"/api/v1/menu/{menuItemId}", new CreateMenuItemResponse(menuItemId.ToString()));
         }).WithValidation<CreateMenuItemRequest>();
 
         group.MapDelete("/{id:int}", async (int id, IMenuItemRepository repository) =>
