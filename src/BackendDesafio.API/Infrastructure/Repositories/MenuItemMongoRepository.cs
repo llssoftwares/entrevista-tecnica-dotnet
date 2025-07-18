@@ -1,4 +1,5 @@
-﻿using BackendDesafio.API.Domain.Entities;
+﻿using BackendDesafio.API.Domain;
+using BackendDesafio.API.Domain.Entities;
 using BackendDesafio.API.Domain.Repositories;
 using MongoDB.Driver;
 
@@ -16,26 +17,25 @@ public class MenuItemMongoRepository : IMenuItemRepository
         _collection = database.GetCollection<MenuItem>("MenuItems");
     }
 
-    public async Task<int> AddMenuItemAsync(string name, string? relatedId)
-    {   
-        int nextId = await GetNextId();
+    public async Task<int> AddMenuItemAsync(MenuItem menuItem)
+    {
+        if (menuItem.RelatedId.HasValue && !await Exists(menuItem.RelatedId.Value))
+            throw new RelatedMenuItemNotFoundException(menuItem.RelatedId.Value);
 
-        var menuItem = new MenuItem
-        {
-            Id = nextId,
-            Name = name,
-            RelatedId = int.TryParse(relatedId, out var intRelatedId) 
-            ? intRelatedId 
-            : null
-        };
+        menuItem.Id = await GetNextId();
 
         await _collection.InsertOneAsync(menuItem);
+
         return menuItem.Id;
     }
 
     public async Task DeleteMenuItemAsync(int id)
     {
+        if (!await Exists(id))
+            throw new MenuItemNotFoundException(id);
+
         var filter = Builders<MenuItem>.Filter.Eq(x => x.Id, id);
+
         await _collection.DeleteOneAsync(filter);
     }
 
@@ -44,10 +44,15 @@ public class MenuItemMongoRepository : IMenuItemRepository
         return await _collection.Find(_ => true).ToListAsync();
     }
 
+    private async Task<bool> Exists(int id)
+    {
+        return await _collection.Find(x => x.Id == id).AnyAsync();
+    }
+
     private async Task<int> GetNextId()
     {
         var sort = Builders<MenuItem>.Sort.Descending(x => x.Id);
-        
+
         var lastItem = await _collection
             .Find(_ => true)
             .Sort(sort)

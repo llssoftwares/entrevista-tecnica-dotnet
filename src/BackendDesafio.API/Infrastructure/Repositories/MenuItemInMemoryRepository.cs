@@ -1,4 +1,5 @@
-﻿using BackendDesafio.API.Domain.Entities;
+﻿using BackendDesafio.API.Domain;
+using BackendDesafio.API.Domain.Entities;
 using BackendDesafio.API.Domain.Repositories;
 
 namespace BackendDesafio.API.Infrastructure.Repositories;
@@ -20,31 +21,35 @@ public class MenuItemInMemoryRepository : IMenuItemRepository
         return await Task.FromResult(result);
     }
 
-    public async Task<int> AddMenuItemAsync(string name, string? relatedId)
+    public async Task<int> AddMenuItemAsync(MenuItem menuItem)
     {
-        var newId = _menuItems.Count != 0
+        if (menuItem.RelatedId.HasValue && !Exists(menuItem.RelatedId.Value))
+            throw new RelatedMenuItemNotFoundException(menuItem.RelatedId.Value);
+
+        menuItem.Id = _menuItems.Count != 0
             ? _menuItems.Max(x => x.Id) + 1
             : 1;
 
-        _menuItems.Add(new MenuItem
-        {
-            Id = newId,
-            Name = name,
-            RelatedId = string.IsNullOrEmpty(relatedId)
-                ? null
-                : int.Parse(relatedId)
-        });
+        _menuItems.Add(menuItem);
 
-        return await Task.FromResult(newId);
+        return await Task.FromResult(menuItem.Id);
     }
 
     public async Task DeleteMenuItemAsync(int id)
     {
+        if (!Exists(id))
+            throw new MenuItemNotFoundException(id);
+
         var menuItem = _menuItems.FirstOrDefault(m => m.Id == id);
         if (menuItem == null) return;
 
         _menuItems.Remove(menuItem);
 
         await Task.CompletedTask;
+    }
+
+    private bool Exists(int id)
+    {
+        return _menuItems.Any(x => x.Id == id);
     }
 }

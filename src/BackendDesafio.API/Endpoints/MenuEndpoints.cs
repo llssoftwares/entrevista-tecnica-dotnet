@@ -1,4 +1,6 @@
-﻿using BackendDesafio.API.Domain.Repositories;
+﻿using BackendDesafio.API.Domain;
+using BackendDesafio.API.Domain.Entities;
+using BackendDesafio.API.Domain.Repositories;
 using BackendDesafio.API.Dtos;
 using BackendDesafio.API.Mappers;
 using BackendDesafio.API.Validation;
@@ -15,7 +17,13 @@ public static class MenuEndpoints
 
         group.MapPost("/", async (CreateMenuItemRequest request, IMenuItemRepository repository) =>
         {
-            var menuItemId = await repository.AddMenuItemAsync(request.Name, request.RelatedId);
+            var menuItem = new MenuItem
+            {
+                Name = request.Name,
+                RelatedId = request.RelatedId.ToNullableInt()
+            };
+                
+            var menuItemId = await repository.AddMenuItemAsync(menuItem);
             return Results.Created($"/api/v1/menu/{menuItemId}", menuItemId);
         }).WithValidation<CreateMenuItemRequest>();
 

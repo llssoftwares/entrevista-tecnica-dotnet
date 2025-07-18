@@ -6,7 +6,7 @@ public interface IMenuItemRepository
 {
     Task<IEnumerable<MenuItem>> GetMenuItemsAsync();
 
-    Task<int> AddMenuItemAsync(string name, string? relatedId);
+    Task<int> AddMenuItemAsync(MenuItem menuItem);
 
     Task DeleteMenuItemAsync(int id);
 }
