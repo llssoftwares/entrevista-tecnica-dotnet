@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendDesafio.API", "src\B
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B6DA0EB0-6C68-4C22-A9D7-B320C4EBB509}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendDesafio.API.UnitTests", "tests\BackendDesafio.API.UnitTests\BackendDesafio.API.UnitTests.csproj", "{32A1A1B6-835B-44DD-9D92-739F1D5E95E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +27,17 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32A1A1B6-835B-44DD-9D92-739F1D5E95E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32A1A1B6-835B-44DD-9D92-739F1D5E95E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32A1A1B6-835B-44DD-9D92-739F1D5E95E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32A1A1B6-835B-44DD-9D92-739F1D5E95E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{236BF755-4AF0-4399-8441-1C286904B19C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{32A1A1B6-835B-44DD-9D92-739F1D5E95E1} = {B6DA0EB0-6C68-4C22-A9D7-B320C4EBB509}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F35B26E6-27C9-44BC-9AE5-7294328FFC06}
