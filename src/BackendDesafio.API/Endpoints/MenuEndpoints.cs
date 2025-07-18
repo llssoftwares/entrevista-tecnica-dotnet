@@ -2,7 +2,6 @@
 using BackendDesafio.API.Domain.Entities;
 using BackendDesafio.API.Domain.Repositories;
 using BackendDesafio.API.Dtos;
-using BackendDesafio.API.Mappers;
 using BackendDesafio.API.Validation;
 
 namespace BackendDesafio.API.Endpoints;

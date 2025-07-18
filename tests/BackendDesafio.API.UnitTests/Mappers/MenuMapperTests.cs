@@ -1,5 +1,5 @@
 ﻿using BackendDesafio.API.Domain.Entities;
-using BackendDesafio.API.Mappers;
+using BackendDesafio.API.Dtos;
 using Shouldly;
 
 namespace BackendDesafio.API.UnitTests.Mappers;

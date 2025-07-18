@@ -1,7 +1,6 @@
 ﻿using BackendDesafio.API.Domain.Entities;
-using BackendDesafio.API.Dtos;
 
-namespace BackendDesafio.API.Mappers;
+namespace BackendDesafio.API.Dtos;
 
 public static class MenuMapper
 {
