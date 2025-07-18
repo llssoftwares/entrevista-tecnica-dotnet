@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BackendDesafio.API.Exceptions;
 
-public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
+public class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger, 
+    IProblemDetailsService problemDetailsService) : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
@@ -15,14 +17,16 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
             _ => StatusCodes.Status500InternalServerError
         };
 
-        await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
+        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
-            Type = exception.GetType().Name,
-            Title = "An error occurred.",
-            Detail = exception.Message
-
-        }, cancellationToken: cancellationToken);
-
-        return true;
+            HttpContext = httpContext,
+            Exception = exception,
+            ProblemDetails = new ProblemDetails
+            {
+                Type = exception.GetType().Name,
+                Title = "An error occurred.",
+                Detail = exception.Message
+            }
+        });        
     }
 }

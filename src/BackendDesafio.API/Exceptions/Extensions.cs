@@ -6,6 +6,12 @@ public static class Extensions
     {
         return services
             .AddExceptionHandler<GlobalExceptionHandler>()
-            .AddProblemDetails();
+            .AddProblemDetails(config =>
+            {
+                config.CustomizeProblemDetails = context =>
+                {
+                    context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
+                };
+            });
     }
 }
