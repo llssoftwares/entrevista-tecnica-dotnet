@@ -43,8 +43,8 @@ public class MenuMapperTests
 
         result.Count.ShouldBe(1);
 
-        result[0].Submenus.Count().ShouldBe(2);
-        result[0].Submenus.First().Submenus.Count().ShouldBe(1);
+        result[0].Submenus.Count.ShouldBe(2);
+        result[0].Submenus.First().Submenus.Count.ShouldBe(1);
         result[0].Submenus.First().Submenus.First().Name.ShouldBe("Item 1.1.1");
     }
 
@@ -62,7 +62,7 @@ public class MenuMapperTests
 
         result.Count.ShouldBe(2);
 
-        result.First(x => x.Name == "Item 1").Submenus.Count().ShouldBe(1);
+        result.First(x => x.Name == "Item 1").Submenus.Count.ShouldBe(1);
         result.First(x => x.Name == "Item 2").Submenus.ShouldBeEmpty();
     }
 }
